@@ -15,6 +15,8 @@ I have windows servers that I manage, and this check will:
 # Dependencies
 The servers need python 3 (I tested with 3.9+) and the cryptography library. The cryptography library can be installed using pip.
 
-# Setup: I will update this section later today or tomorrow - just created this repo
+# Setup: 
+I will update this section later today or tomorrow - just created this repo
 
-# Roadmap: I will update this section later today or tomorrow
+# Roadmap: 
+I will update this section later today or tomorrow
