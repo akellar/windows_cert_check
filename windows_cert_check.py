@@ -65,20 +65,20 @@ for cert in certificate:
 
 # If any certs are about to expire in a week or less, throw critical and exit
 if num_crit > 0:
-    print("CRITICAL - %d certificate(s) already expired, or less than one week from expired" % num_crit, end="")
+    print("CRITICAL - %d certificate(s) already expired, or less than one week from expired |" % num_crit, end="")
     # Get performance data. Re-calculate time until expiration and then print the data as:
     # 'cert_subject'=days_until_expiration.
     #  This will allow icinga to display the cert and days until expiration in the performance data section
     for cert in expiring_certs:
         time_until_expiration = cert.not_valid_after - today
-        print(" | '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days))
+        print(" '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days), end="")
     exit(2)
 # If any certs are about to expire in 3 weeks, throw warning and exit
 elif num_warn > 0:
-    print("WARNING - %d certificate(s) are less than two weeks from expiration" % num_warn, end="")
+    print("WARNING - %d certificate(s) are less than two weeks from expiration |" % num_warn, end="")
     for cert in expiring_certs:
         time_until_expiration = cert.not_valid_after - today
-        print(" | '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days))
+        print(" '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days), end="")
     exit(1)
 else:
     print("OK - There are no expiring certificates")
