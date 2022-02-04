@@ -27,9 +27,13 @@ def get_cert_name(cert):
     name = re.findall(regex, sub)
     sub = str(name).strip("['']")
 
-    # Cert subject cannot have =, if the cert has CN=, strip it
-    if "CN=" in sub:
-        sub = sub.strip("CN=")
+    # Icinga cannot process '=' as perf data, must remove it
+    if "=" in sub:
+        reg = "(?<==)[a-zA-Z0-9-.]*"
+        name = ""
+
+        name = re.findall(reg, sub)
+        sub = str(name).strip("['']")
 
     return sub
 
