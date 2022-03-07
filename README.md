@@ -25,3 +25,4 @@ The servers need python 3 (I tested with 3.9+) and the cryptography library. The
 Quick note on this setup: I used the Icinga Director to set up the check command and service. The Director makes it much easier than having to set up the check and service via the CLI. I would recommend, if you haven't imported the Director, that you do this and familiarize yourself prior to installing the check.
 
 # Roadmap: 
+1. Make the setup a bit more descriptive, with some screenshots included. I need to spin up a lab environment at home and get everything running in order to do this. 
