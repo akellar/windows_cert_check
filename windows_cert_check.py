@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 import ssl
 import argparse
 import sys
@@ -37,23 +36,26 @@ def get_cert_name(cert):
 
     return sub
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('-V', '--version', action='version', version='%(prog)s v' + sys.modules[__name__].__version__)
+    parser.add_argument('-c', '--critical', required=True, type=int, help="Set critical threshold for certificate expiration")
+    parser.add_argument('-w', '--warning', required=True, type=int, help="Set warning threshold for certificate expiration")
+
     args = parser.parse_args()
 
 # Initialize and declare variables
-warn_threshold = timedelta(days=21)
-crit_threshold = timedelta(days=7)
+warn_threshold = timedelta(days=args.warning)
+crit_threshold = timedelta(days=args.critical)
 today = datetime.now()
 expiring_certs = []
 num_crit = 0
 num_warn = 0
 
-# Begin main method
+# Get certificates from CurrentUser/MY and LocalMachine/MY
 certificate = get_certs()
 
 # loop through list of certificates
@@ -69,20 +71,24 @@ for cert in certificate:
 
 # If any certs are about to expire in a week or less, throw critical and exit
 if num_crit > 0:
-    print("CRITICAL - %d certificate(s) already expired, or less than one week from expired |" % num_crit, end="")
+    print("CRITICAL - %d certificate(s) already expired, or less than %d day(s) from expired |" % (num_crit, args.critical), end="")
     # Get performance data. Re-calculate time until expiration and then print the data as:
     # 'cert_subject'=days_until_expiration.
     #  This will allow icinga to display the cert and days until expiration in the performance data section
     for cert in expiring_certs:
         time_until_expiration = cert.not_valid_after - today
-        print(" '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days), end="")
+        print(" '%s'=%s" % (str(get_cert_name(cert)), str(time_until_expiration.days)), end="")
+        # old way to print using string concatenation - try using substitution instead. if working, delete this
+        #print(" '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days), end="")
     exit(2)
 # If any certs are about to expire in 3 weeks, throw warning and exit
 elif num_warn > 0:
-    print("WARNING - %d certificate(s) are less than two weeks from expiration |" % num_warn, end="")
+    print("WARNING - %d certificate(s) are less than %d day(s) from expiration |" % (num_warn, args.warning), end="")
     for cert in expiring_certs:
         time_until_expiration = cert.not_valid_after - today
-        print(" '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days), end="")
+        print(" '%s'=%s" % (str(get_cert_name(cert)), str(time_until_expiration.days)), end="")
+        # old way to print using string concatenation - try using substitution instead. if working, delete this
+        #print(" '" + str(get_cert_name(cert)) + "'=" + str(time_until_expiration.days), end="")
     exit(1)
 else:
     print("OK - There are no expiring certificates")
