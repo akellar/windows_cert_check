@@ -19,7 +19,7 @@ The servers need python 3 (I tested with 3.9+) and the cryptography library. The
   1. Install Python 3.9+ either directly or via chocolatey
   2. Install the cryptography library with pip
   3. Clone repo onto the target machine that will run the check. This check will be run by the agent on the windows machine
-  5. Create a command in Icinga that will identify the compiler on your windows machine and location of the windows_cert_check.py file
+  5. Create a command in Icinga that will identify the location of the interpreter on your windows machine and location of the windows_cert_check.py file
   6. Create a service check and use the command created as the check command
 
 Quick note on this setup: I used the Icinga Director to set up the check command and service. The Director makes it much easier than having to set up the check and service via the CLI. I would recommend, if you haven't imported the Director, that you do this and familiarize yourself prior to installing the check.
